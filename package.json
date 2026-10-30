@@ -1,7 +1,7 @@
 {
-  "name": "vercel-cmd-api",
-  "version": "1.0.0",
-  "engines": {
-    "node": "26.x"
+  "functions": {
+    "api/**/*.js": {
+      "includeFiles": "dosyalar/**"
+    }
   }
 }
