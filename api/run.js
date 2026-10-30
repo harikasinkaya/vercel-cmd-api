@@ -17,18 +17,15 @@ export default async function handler(req, res) {
     }
 
     const startTime = Date.now();
-
-    // Vercel'in ana dizinindeki 'dosyalar' klasörünün tam yolunu belirliyoruz
     const targetDir = path.join(process.cwd(), 'dosyalar');
 
     try {
-        // cwd (Current Working Directory) parametresi ile komutu dosyalar klasörü içinde çalıştır
+        // timeout sınırını tamamen kaldırdık, komut ne kadar sürerse bekleyecek 
+        // (Vercel'in kendi 10 saniye sınırına çarpana kadar)
         const { stdout, stderr } = await execPromise(cmd, { 
-            timeout: 8000, 
             cwd: targetDir 
         });
         
-        // Ortam bilgilerini de aynı klasör içinde çalıştırarak doğru lokasyonu al
         const { stdout: pwdOut } = await execPromise('pwd', { cwd: targetDir });
         const { stdout: whoamiOut } = await execPromise('whoami');
 
@@ -56,7 +53,6 @@ export default async function handler(req, res) {
             error_details: {
                 message: error.message,
                 exit_code: error.code || null,
-                killed_by_timeout: error.killed || false
             },
             output: error.stdout ? error.stdout.trim() : null,
             error_output: error.stderr ? error.stderr.trim() : null
